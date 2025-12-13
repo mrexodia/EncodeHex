@@ -27,7 +27,7 @@ endif()
 include("cmake/msvc-static-runtime.cmake")
 include("cmake/msvc-configurations.cmake")
 
-project(PluginTemplate)
+project(EncodeHex)
 
 include(FetchContent)
 
@@ -38,16 +38,16 @@ endif()
 message(STATUS "Fetching x64dbg...")
 FetchContent_Declare(x64dbg
 	URL
-		"https://downloads.sourceforge.net/project/x64dbg/snapshots/snapshot_2023-06-10_18-05.zip"
+		"https://github.com/x64dbg/x64dbg/releases/download/2025.08.19/x64dbg-pluginsdk.zip"
 	URL_HASH
-		SHA1=04468bd61fb36d6b10d17f342f03ef12f5b2ce62
+		SHA256=983f2588973a06920f90b75aa1bec9e1a847a3ab40a7b7f6a5b1eddc9b72cc48
 )
 FetchContent_MakeAvailable(x64dbg)
 
 include("cmake/x64dbg.cmake")
 
-# Target: PluginTemplate
-set(PluginTemplate_SOURCES
+# Target: EncodeHex
+set(EncodeHex_SOURCES
 	"src/plugin.cpp"
 	"src/pluginmain.cpp"
 	"src/plugin.h"
@@ -55,8 +55,12 @@ set(PluginTemplate_SOURCES
 	cmake.toml
 )
 
-x64dbg_plugin(PluginTemplate)
+x64dbg_plugin(EncodeHex)
 
-target_sources(PluginTemplate PRIVATE ${PluginTemplate_SOURCES})
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${PluginTemplate_SOURCES})
+target_sources(EncodeHex PRIVATE ${EncodeHex_SOURCES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${EncodeHex_SOURCES})
+
+target_compile_features(EncodeHex PUBLIC
+	cxx_std_17
+)
 

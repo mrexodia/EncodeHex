@@ -3,24 +3,25 @@ version = "3.15"
 cmkr-include = "cmake/cmkr.cmake"
 
 [project]
-name = "PluginTemplate"
+name = "EncodeHex"
 include-before = [
 	"cmake/msvc-static-runtime.cmake",
 	"cmake/msvc-configurations.cmake",
 ]
 
 [fetch-content.x64dbg]
-url = "https://sourceforge.net/projects/x64dbg/files/snapshots/snapshot_2023-06-10_18-05.zip"
-sha1 = "04468bd61fb36d6b10d17f342f03ef12f5b2ce62"
+url = "https://github.com/x64dbg/x64dbg/releases/download/2025.08.19/x64dbg-pluginsdk.zip"
+sha256 = "983f2588973a06920f90b75aa1bec9e1a847a3ab40a7b7f6a5b1eddc9b72cc48"
 include-after = ["cmake/x64dbg.cmake"]
 
 [template.plugin]
 type = "shared"
 add-function = "x64dbg_plugin"
 
-[target.PluginTemplate]
+[target.EncodeHex]
 type = "plugin"
 sources = [
     "src/*.cpp",
     "src/*.h",
 ]
+compile-features = ["cxx_std_17"]
