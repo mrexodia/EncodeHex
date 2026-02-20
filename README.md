@@ -1,51 +1,100 @@
-# PluginTemplate
+# EncodeHex
 
-Template CMake project for x64dbg plugins. This uses [cmkr](https://cmkr.build), `cmake.toml` contains the project configuration.
+An x64dbg plugin that provides expression functions for encoding strings as hexadecimal bytes.
 
-## Using the template
+## Features
 
-You can click the green *Use this template* button. See the article [*Creating a repository from a template*
-](https://docs.github.com/en/free-pro-team@latest/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) by GitHub for more details.
+This plugin registers an `encode()` expression function that can be used anywhere x64dbg accepts expressions (commands, breakpoints, conditions, etc.).
 
-Alternatively you can download a ZIP of this repository and set up the template locally.
+### Usage
 
-## Getting started
+```
+encode("string", "encoding")
+```
 
-- Pretty much all of the available functionality can be found in [`bridgemain.h`](https://github.com/x64dbg/x64dbg/blob/97ff1ec98a5bbf543e6d80ebbbd2401edf6c8cca/src/bridge/bridgemain.h).
-- You can find some (commented) example code in [`src/plugin.cpp`](./src/plugin.cpp).
-- Example plugins: https://plugins.x64dbg.com.
-- References:
-  - https://help.x64dbg.com/en/latest/developers/plugins/index.html
-  - https://x64dbg.com/blog/2016/10/04/architecture-of-x64dbg.html
-  - https://x64dbg.com/blog/2016/10/20/threading-model.html
-  - https://x64dbg.com/blog/2016/07/30/x64dbg-plugin-sdk.html
+**Parameters:**
+- `string` - The input string to encode (UTF-8)
+- `encoding` - The target encoding: `"utf-8"` / `"utf8"` or `"utf-16"` / `"utf16"`
+
+**Returns:** A hexadecimal string representation of the input.
+
+### Examples
+
+Encode "Hello" as UTF-8 hex bytes:
+```
+encode("Hello", "utf-8")
+```
+Result: `48656C6C6F`
+
+Encode "Hello" as UTF-16 hex bytes:
+```
+encode("Hello", "utf-16")
+```
+Result: `480065006C006C006F00`
+
+### Use Cases
+
+- Converting strings to hex for memory search patterns
+- Building byte sequences for patching
+- Debugging string encoding issues
+- Creating signatures that include string data
 
 ## Building
 
-From a Visual Studio command prompt:
+### Prerequisites
 
+- Visual Studio with C++ development tools
+- CMake 3.15 or higher
+
+### Build Commands
+
+From a Visual Studio Developer Command Prompt:
+
+**64-bit:**
 ```
 cmake -B build64 -A x64
 cmake --build build64 --config Release
 ```
 
-You will get `build64\PluginTemplate.sln` that you can open in Visual Studio.
-
-To build a 32-bit plugin:
-
+**32-bit:**
 ```
 cmake -B build32 -A Win32
 cmake --build build32 --config Release
 ```
 
-Alternatively you can open this folder in Visual Studio/CLion/Qt Creator.
+The compiled plugin (`.dp32` or `.dp64`) will be in the build directory.
 
-![building animation](https://github.com/x64dbg/PluginTemplate/blob/3951eb4b320b7a26164616ab5141414e8cd5b0a1/building.gif?raw=true)
+## Installation
 
-## Creating releases
+Copy the appropriate plugin file to your x64dbg plugins directory:
+- `EncodeHex.dp32` → `x32/plugins/`
+- `EncodeHex.dp64` → `x64/plugins/`
 
-This template has GitHub Actions set up in [`.github/workflows/build.yml`](./.github/workflows/build.yml). If you push a tag prefixed with `v` (for instance `v1.0`) it will automatically publish a GitHub release with the plugin binaries compiled for both architectures.
+Restart x64dbg to load the plugin.
 
-## Automatic reloading
+## Development
 
-You can set up the [PluginDevHelper](https://github.com/x64dbg/PluginDevHelper) utility to automatically unload and reload the plugin from x64dbg when compiling. See the README there for more detailled instructions.
+This project uses [cmkr](https://cmkr.build) for CMake generation. The project configuration is in `cmake.toml`.
+
+### Project Structure
+
+```
+EncodeHex/
+├── src/
+│   ├── plugin.cpp      # Main plugin logic
+│   ├── pluginmain.cpp  # Plugin boilerplate
+│   └── pluginmain.h    # Plugin headers
+├── cmake.toml          # cmkr configuration
+├── CMakeLists.txt      # Generated CMake (do not edit)
+└── cmake/              # CMake utilities
+```
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## References
+
+- [x64dbg Plugin Documentation](https://help.x64dbg.com/en/latest/developers/plugins/index.html)
+- [x64dbg Plugin SDK](https://x64dbg.com/blog/2016/07/30/x64dbg-plugin-sdk.html)
+- [Plugin Template](https://github.com/x64dbg/PluginTemplate)
